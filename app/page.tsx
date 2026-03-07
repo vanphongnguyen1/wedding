@@ -29,7 +29,11 @@ const events = [
 export default function Home() {
   return (
     <div className="bg-stone-50 overflow-x-hidden">
+      {/* ── MUSIC PLAYER ── */}
+      <WeddingMusicPlayer src="/music/ngay-dau-tien-lofi-ver-duc-phuc.mp3" />
 
+      {/* ── NOTIFICATIONS ── */}
+      <WeddingNotifications />
       {/* ── HERO ── */}
       <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden">
         <Image
@@ -251,12 +255,6 @@ export default function Home() {
           <p className="text-white/30 text-xs mt-8">© 2023 Văn Phong & Hồng Nhung Wedding</p>
         </AnimateInView>
       </footer>
-
-      {/* ── MUSIC PLAYER ── */}
-      <WeddingMusicPlayer src="/music/ngay-dau-tien-lofi-ver-duc-phuc.mp3" />
-
-      {/* ── NOTIFICATIONS ── */}
-      <WeddingNotifications />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LightboxProps {
@@ -15,9 +15,9 @@ interface LightboxProps {
 
 export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext }: LightboxProps) {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape")      onClose();
-    if (e.key === "ArrowLeft")   onPrev();
-    if (e.key === "ArrowRight")  onNext();
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowLeft") onPrev();
+    if (e.key === "ArrowRight") onNext();
   }, [onClose, onPrev, onNext]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
     >
       {/* Image container */}
       <div
-        className="relative max-w-[90vw] max-h-[90vh] w-full h-full flex items-center justify-center"
+        className="relative max-w-[90vw] max-h-[90vh] w-full flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         <Image
@@ -48,6 +48,17 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
           className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl animate-[scaleIn_0.25s_cubic-bezier(0.34,1.56,0.64,1)]"
           priority
         />
+
+        {/* Download */}
+        <a
+          href={images[currentIndex]}
+          download
+          onClick={(e) => e.stopPropagation()}
+          aria-label="Tải ảnh"
+          className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/20 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200 hover:scale-110 backdrop-blur-sm"
+        >
+          <Download className="w-5 h-5 text-black" />
+        </a>
       </div>
 
       {/* Close */}
@@ -58,6 +69,7 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
       >
         <X className="w-5 h-5" />
       </button>
+
 
       {/* Prev */}
       <button

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,10 +10,8 @@ const slides = [
   "/images/album 20x30 doc_05.JPG",
   "/images/album 20x30 doc_06.JPG",
   "/images/album 20x30 doc_07.JPG",
-  "/images/album 20x30 doc_01.JPG",
   "/images/album 20x30 doc_08.JPG",
   "/images/album 20x30 doc_09.JPG",
-  "/images/album 20x30 doc_04.JPG",
   "/images/album 20x30 doc_10.JPG",
   "/images/album 20x30 doc_12.JPG",
 ];
