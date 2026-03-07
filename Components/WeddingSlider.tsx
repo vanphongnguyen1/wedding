@@ -10,8 +10,10 @@ const slides = [
   "/images/album 20x30 doc_05.JPG",
   "/images/album 20x30 doc_06.JPG",
   "/images/album 20x30 doc_07.JPG",
+  "/images/album 20x30 doc_01.JPG",
   "/images/album 20x30 doc_08.JPG",
   "/images/album 20x30 doc_09.JPG",
+  "/images/album 20x30 doc_04.JPG",
   "/images/album 20x30 doc_10.JPG",
   "/images/album 20x30 doc_12.JPG",
 ];
