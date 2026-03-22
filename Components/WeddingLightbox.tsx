@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import Image from "next/image";
+import { ImageLoading } from "@/Components/common/ImageLoading";
 import { X, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -39,7 +39,7 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
         className="relative max-w-[90vw] max-h-[90vh] w-full flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
+        <ImageLoading
           key={currentIndex}
           src={images[currentIndex]}
           alt={`Wedding photo ${currentIndex + 1}`}

@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef, useCallback } from "react";
+import Masonry from "react-masonry-css";
+import { ImageLoading } from "@/Components/common/ImageLoading";
 import { Heart, Camera, Flower2 } from "lucide-react";
 import { WeddingLightbox } from "@/Components/WeddingLightbox";
 import { AnimateInView } from "@/Components/AnimateInView";
 import { WeddingMusicPlayer } from "./WeddingMusicPlayer";
+
+const masonryBreakpoints = { default: 5, 1024: 3, 768: 2 };
+const PAGE_SIZE = 30;
 
 export const ALL_IMAGES: string[] = [
   "/images/PTH_1768.JPG",
@@ -280,26 +284,31 @@ interface ImageGridProps {
 
 function ImageGrid({ images, onOpen }: ImageGridProps) {
   return (
-    <div className="columns-2 md:columns-3 lg:columns-5 gap-3">
+    <Masonry
+      breakpointCols={masonryBreakpoints}
+      className="flex gap-3"
+      columnClassName="flex flex-col gap-3"
+    >
       {images.map((src, i) => (
         <AnimateInView
           key={src}
           animation="zoom-in"
           delay={Math.min((i % 10) * 40, 300)}
           duration={500}
-          className="break-inside-avoid mb-3 overflow-hidden rounded-xl"
+          className="overflow-hidden rounded-xl"
         >
           <button
             onClick={() => onOpen(i)}
-            className="relative w-full block group cursor-zoom-in"
+            className="relative w-full block group cursor-zoom-in bg-stone-100"
             aria-label={`Xem ảnh ${i + 1}`}
           >
-            <Image
+            <ImageLoading
               src={src}
               alt={`Wedding photo ${i + 1}`}
               width={600}
               height={800}
-              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+              quality={70}
+              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
@@ -310,16 +319,42 @@ function ImageGrid({ images, onOpen }: ImageGridProps) {
           </button>
         </AnimateInView>
       ))}
-    </div>
+    </Masonry>
   );
 }
 
 export function GalleryPage() {
   const [activeTab, setActiveTab] = useState<Tab>("anhcuoi");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const currentTab = TABS.find((t) => t.id === activeTab)!;
   const currentImages = currentTab.images;
+  const visibleImages = currentImages.slice(0, visibleCount);
+  const hasMore = visibleCount < currentImages.length;
+
+  const loadMore = useCallback(() => {
+    setVisibleCount((c) => Math.min(c + PAGE_SIZE, currentImages.length));
+  }, [currentImages.length]);
+
+  // Reset khi đổi tab
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setVisibleCount(PAGE_SIZE);
+  }, [activeTab]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) loadMore(); },
+      { rootMargin: "100px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
 
   const open = (i: number) => setLightboxIndex(i);
   const close = () => setLightboxIndex(null);
@@ -411,7 +446,15 @@ export function GalleryPage() {
 
         {/* ── Image Grid ── */}
         <div className="max-w-7xl mx-auto px-3 pt-1">
-          <ImageGrid key={activeTab} images={currentImages} onOpen={open} />
+          <ImageGrid key={activeTab} images={visibleImages} onOpen={open} />
+          {/* Sentinel for infinite scroll */}
+          <div ref={sentinelRef} className="py-6 flex justify-center">
+            {hasMore && (
+              <span className="text-stone-400 text-xs tracking-widest uppercase animate-pulse">
+                Đang tải thêm...
+              </span>
+            )}
+          </div>
         </div>
 
       </main>

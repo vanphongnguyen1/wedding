@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ImageLoading } from "@/Components/common/ImageLoading";
 import { Heart, MapPin, Calendar, Clock, ChevronDown } from "lucide-react";
 import { WeddingRSVP } from "@/Components/WeddingRSVP";
 import { AnimateInView } from "@/Components/AnimateInView";
@@ -36,17 +36,17 @@ export default function Home() {
       <WeddingNotifications />
       {/* ── HERO ── */}
       <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden">
-        <Image
+        <ImageLoading
           src="/images/PTH_1768.JPG"
           alt="Ảnh cưới"
-          fill
+              fill
           className="hidden lg:block object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
           priority
         />
-        <Image
+        <ImageLoading
           src="/images/PTH_2045.JPG"
           alt="Ảnh cưới"
-          fill
+             fill
           className="block lg:hidden object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
           priority
         />
@@ -107,18 +107,20 @@ export default function Home() {
             <AnimateInView animation="slide-left" duration={800}>
               <div className="relative">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                  <Image
+                  <ImageLoading
                     src="/images/PTH_1802.JPG"
                     alt="Câu chuyện của chúng mình"
-                    fill
+                      
+                                     fill
                     className="object-cover hover:scale-105 transition-transform duration-700"
                   />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-48 h-48 rounded-xl overflow-hidden shadow-xl border-4 border-white animate-float">
-                  <Image
+                  <ImageLoading
                     src="/images/PTH_2166.JPG"
                     alt="Kỷ niệm"
-                    fill
+                    
+                                     fill
                     className="object-cover"
                   />
                 </div>
@@ -158,7 +160,7 @@ export default function Home() {
 
       {/* ── FULL WIDTH PHOTO BANNER ── */}
       <div className="relative h-[60vh] overflow-hidden">
-        <Image
+        <ImageLoading
           src="/images/PTH_2030.JPG"
           alt="Wedding banner"
           fill
@@ -232,7 +234,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="relative py-24 overflow-hidden">
-        <Image
+        <ImageLoading
           src="/images/PTH_2107.JPG"
           alt="Footer background"
           fill

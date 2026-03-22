@@ -12,7 +12,6 @@ export function WeddingMusicPlayer({ src = "/audio/wedding-music.mp3" }: Wedding
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
   // hint shows when we auto-played muted, waiting for user to unmute
   const [showHint, setShowHint] = useState(false);
@@ -23,35 +22,26 @@ export function WeddingMusicPlayer({ src = "/audio/wedding-music.mp3" }: Wedding
     return () => clearTimeout(t);
   }, []);
 
-  // Auto-play as soon as audio is ready
+  // Play có tiếng ngay sau lần tương tác đầu tiên của user
   useEffect(() => {
-    if (!ready) return;
     const audio = audioRef.current;
     if (!audio) return;
 
-    // 1. Try auto-play WITH sound
-    audio.muted = false;
-    audio.play()
-      .then(() => {
-        setPlaying(true);
-        setMuted(false);
-        setShowHint(false);
-      })
-      .catch(() => {
-        // 2. Browser blocked — try muted (always allowed)
-        audio.muted = true;
-        audio.play()
-          .then(() => {
-            setPlaying(true);
-            setMuted(true);
-            setShowHint(true); // Tell user to click to enable sound
-          })
-          .catch(() => {
-            // 3. Completely blocked — user must press play manually
-            setPlaying(false);
-          });
-      });
-  }, [ready]);
+    const onInteract = () => {
+      audio.muted = false;
+      audio.play()
+        .then(() => {
+          setPlaying(true);
+          setMuted(false);
+          setShowHint(false);
+        })
+        .catch(() => setPlaying(false));
+    };
+
+    const events = ["click", "scroll", "touchstart", "keydown"] as const;
+    events.forEach((e) => window.addEventListener(e, onInteract, { once: true, passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, onInteract));
+  }, []);
 
   // When muted + playing: unmute on first user interaction anywhere on the page
   useEffect(() => {
@@ -98,7 +88,6 @@ export function WeddingMusicPlayer({ src = "/audio/wedding-music.mp3" }: Wedding
         src={src}
         loop
         preload="auto"
-        onCanPlayThrough={() => setReady(true)}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import Image from "next/image";
+import { ImageLoading } from "@/Components/common/ImageLoading";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -53,7 +53,7 @@ export function WeddingSlider() {
             i === current ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         >
-          <Image
+          <ImageLoading
             src={src}
             alt={`Wedding slide ${i + 1}`}
             fill
