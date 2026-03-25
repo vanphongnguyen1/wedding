@@ -23,6 +23,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://phongnhung.netlify.app"),
   title: "Văn Phong & Hồng Nhung — Wedding 07.05.2023",
   description: "Trân trọng kính mời bạn tham dự lễ cưới của Văn Phong & Hồng Nhung",
   openGraph: {
