@@ -81,7 +81,8 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
         <ImageLoading
           key={currentIndex}
           src={images[currentIndex]}
-          animationDuration={100}
+          animationDuration={150}
+          isLayzy={false}
           alt={`Wedding photo ${currentIndex + 1}`}
           width={1200}
           height={900}

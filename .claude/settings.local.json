@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node scripts/resize-images.mjs)"
+      "Bash(node scripts/resize-images.mjs)",
+      "Bash(node scripts/resize-new-images.mjs)"
     ]
   }
 }
