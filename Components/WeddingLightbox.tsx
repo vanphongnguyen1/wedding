@@ -29,6 +29,45 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
     };
   }, [handleKeyDown]);
 
+  // Prefetch prev-1, next+1, next+2 via <link rel="preload"> pointing at Next.js optimizer URL
+  useEffect(() => {
+    const indices = [currentIndex - 1, currentIndex + 1, currentIndex + 2];
+    const links = indices
+      .filter((i) => i >= 0 && i < images.length)
+      .map((i) => {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = `/_next/image?url=${encodeURIComponent(images[i])}&w=1200&q=75`;
+        document.head.appendChild(link);
+        return link;
+      });
+    return () => links.forEach((l) => l.remove());
+  }, [currentIndex, images]);
+
+  useEffect(() => {
+    let startX: number | null = null;
+
+    const onTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (startX === null) return;
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) onNext(); else onPrev();
+      }
+      startX = null;
+    };
+
+    document.addEventListener("touchstart", onTouchStart);
+    document.addEventListener("touchend", onTouchEnd);
+    return () => {
+      document.removeEventListener("touchstart", onTouchStart);
+      document.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [onNext, onPrev]);
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 animate-[fadeIn_0.2s_ease]"
@@ -42,10 +81,11 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
         <ImageLoading
           key={currentIndex}
           src={images[currentIndex]}
+          animationDuration={100}
           alt={`Wedding photo ${currentIndex + 1}`}
           width={1200}
           height={900}
-          className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl animate-[scaleIn_0.25s_cubic-bezier(0.34,1.56,0.64,1)]"
+          className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
           priority
         />
 

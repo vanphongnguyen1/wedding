@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
+@import 'swiper/css';
+@import 'swiper/css/pagination';
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -124,6 +125,19 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .active-slide {
+    width: 550px !important;
+  }
+
+  .swiper-slide {
+transition: all 1s ease;
+
+  }
+
+  .swiper-slide-active {
+ width: 550px !important;
+}
 }
 
 /* ── Wedding animations ── */

@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 Project instructions for Claude Code. All agents and commands inherit these rules.
 
 ---
@@ -19,18 +21,33 @@ npx shadcn@latest add <component-name>  # Add shadcn/ui component
 
 **Next.js 16 App Router** · TypeScript · Tailwind CSS v4 · shadcn/ui
 
+This is a Vietnamese wedding website for Văn Phong & Hồng Nhung. Content (labels, copy) is in Vietnamese.
+
 | Path | Purpose |
 |---|---|
 | `app/` | App Router pages + layouts |
-| `app/globals.css` | Global styles, Tailwind v4 directives, CSS variables |
+| `app/globals.css` | Global styles, Tailwind v4 directives, CSS variables (oklch color tokens) |
 | `Components/` | Project components (capital C) |
-| `components/ui/` | shadcn/ui generated — **never edit manually** |
+| `Components/ui/` | shadcn/ui generated — **never edit manually** |
+| `Components/common/` | Shared utility components (e.g. `ImageLoading`) |
 | `lib/utils.ts` | `cn()` helper for Tailwind class merging |
 | `hooks/` | Custom React hooks |
 
 **shadcn/ui config** (`components.json`): style `new-york`, base color `neutral`, CSS variables on, icons `lucide`.
 
-**Path aliases**: `@/components`, `@/components/ui`, `@/lib`, `@/hooks`
+**Path aliases**: `@/Components`, `@/Components/ui`, `@/lib`, `@/hooks`
+
+**Fonts** (configured in `app/layout.tsx`, exposed as CSS variables):
+- `font-sans` → Geist Sans (`--font-geist-sans`)
+- `font-mono` → Geist Mono (`--font-geist-mono`)
+- `font-serif` → Playfair Display (`--font-playfair`) — used for headings and decorative text
+
+**Key dependencies**:
+- `swiper` — photo sliders (`WeddingSlider`)
+- `zustand` — client state management
+- `react-masonry-css` — masonry photo gallery layout
+- `sonner` — toast notifications (Toaster in root layout, position `top-right`)
+- `tw-animate-css` — CSS animation utilities imported in `globals.css`
 
 ---
 

@@ -378,7 +378,7 @@ export function GalleryPage() {
               backgroundSize: "32px 32px",
             }}
           />
-          <AnimateInView animation="fade-up" className="relative z-10">
+          {/* <AnimateInView animation="fade-up" className="relative z-10"> */}
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-px w-12 bg-rose-200" />
               <Heart className="w-4 h-4 text-rose-400 animate-heartbeat" />
@@ -393,7 +393,7 @@ export function GalleryPage() {
             <p className="text-stone-400 text-sm tracking-wide">
               Văn Phong &amp; Hồng Nhung · 07.05.2023
             </p>
-          </AnimateInView>
+          {/* </AnimateInView> */}
         </div>
 
         {/* ── Sticky Tab Bar ── */}
