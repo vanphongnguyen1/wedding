@@ -43,11 +43,22 @@ This is a Vietnamese wedding website for Văn Phong & Hồng Nhung. Content (lab
 - `font-serif` → Playfair Display (`--font-playfair`) — used for headings and decorative text
 
 **Key dependencies**:
-- `swiper` — photo sliders (`WeddingSlider`)
-- `zustand` — client state management
-- `react-masonry-css` — masonry photo gallery layout
+- `react-masonry-css` — masonry photo gallery layout (`WeddingGallery`, `GalleryPage`)
 - `sonner` — toast notifications (Toaster in root layout, position `top-right`)
 - `tw-animate-css` — CSS animation utilities imported in `globals.css`
+- `swiper` — installed; CSS (`swiper/css`) imported globally in `globals.css`, but `WeddingSlider` is a custom implementation, not using swiper JS
+
+**Public assets**:
+- `public/images/PTH_*.JPG` — pre-wedding / engagement shoot photos
+- `public/images/iwindding/_MG_*.jpg` — wedding day ceremony photos
+- `public/images/album 20x30 doc_*.JPG` — printed album photos used in `WeddingSlider`
+- `public/music/` — background music MP3 files (passed via `src` prop to `WeddingMusicPlayer`)
+
+**Scroll animations**: `AnimateInView` (`Components/AnimateInView.tsx`) wraps any content needing an entrance animation. It accepts `animation`, `delay`, and `duration` props, and uses `hooks/useInView.ts` (IntersectionObserver, fires once). Available animations: `fade-up`, `fade-in`, `slide-left`, `slide-right`, `zoom-in`.
+
+**Gallery page** (`/gallery`, `Components/GalleryPage.tsx`): two tabs — "Ảnh cưới" (`PTH_*` set) and "Wedding" (`iwindding/_MG_*` set) — with infinite-scroll masonry and a `WeddingLightbox` overlay.
+
+**RSVP form** (`Components/WeddingRSVP.tsx`): frontend-only; no API submission. `handleSubmit` just flips `submitted` state to show a confirmation message.
 
 ---
 
@@ -63,7 +74,7 @@ This is a Vietnamese wedding website for Văn Phong & Hồng Nhung. Content (lab
 
 5. **lucide-react for icons.** No other icon libraries.
 
-6. **Named exports for components.** Use `export function MyComponent` not `export default`.
+6. **Named exports for components.** Use `export function MyComponent` not `export default`. Exception: `Components/Header.tsx` uses `export default` (required by Next.js layout import pattern).
 
 ---
 

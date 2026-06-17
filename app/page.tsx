@@ -4,6 +4,7 @@ import { WeddingRSVP } from "@/Components/WeddingRSVP";
 import { AnimateInView } from "@/Components/AnimateInView";
 import { WeddingMusicPlayer } from "@/Components/WeddingMusicPlayer";
 import { WeddingGallery } from "@/Components/WeddingGallery";
+import { GalleryHero3D } from "@/Components/GalleryHero3D";
 import { WeddingSlider } from "@/Components/WeddingSlider";
 import { WeddingNotifications } from "@/Components/WeddingNotifications";
 
@@ -28,31 +29,23 @@ const events = [
 
 export default function Home() {
   return (
-    <div className="bg-stone-50 overflow-x-hidden">
+    <div className="overflow-x-hidden">
+      {/* ── FIXED 3D BACKGROUND ── */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <GalleryHero3D />
+      </div>
+
       {/* ── MUSIC PLAYER ── */}
       <WeddingMusicPlayer src="/music/ngay-dau-tien-lofi-ver-duc-phuc.mp3" />
 
       {/* ── NOTIFICATIONS ── */}
       <WeddingNotifications />
+
       {/* ── HERO ── */}
       <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden">
-        <ImageLoading
-          src="/images/PTH_1768.JPG"
-          alt="Ảnh cưới"
-              fill
-          className="hidden lg:block object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
-          priority
-        />
-        <ImageLoading
-          src="/images/PTH_2045.JPG"
-          alt="Ảnh cưới"
-             fill
-          className="block lg:hidden object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-white/25 to-white/85" />
 
-        <div className="absolute z-10 text-center w-full top-o text-white px-6">
+        <div className="absolute z-10 text-center w-full top-o text-stone-800 px-6">
 
           <div className="lg:flex justify-center">
             <h1 className="font-serif text-6xl sm:text-7xl md:text-9xl font-light leading-none mb-4 opacity-0 animate-hero-name-1">
@@ -60,7 +53,7 @@ export default function Home() {
             </h1>
             <div className="flex items-center justify-center gap-6 my-2 opacity-0 animate-hero-divider">
               <div className="h-px w-16 bg-rose-300/70" />
-              <Heart className="w-8 h-8 text-rose-300 animate-heartbeat" />
+              <Heart className="w-8 h-8 text-rose-400 animate-heartbeat" />
               <div className="h-px w-16 bg-rose-300/70" />
             </div>
             <h1 className="font-serif text-6xl sm:text-7xl md:text-9xl font-light leading-none mb-8 opacity-0 animate-hero-name-2">
@@ -79,14 +72,14 @@ export default function Home() {
         <a
           href="#story"
           aria-label="Cuộn xuống"
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60 hover:text-white/90 transition-colors animate-bounce opacity-0 animate-hero-scroll"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-stone-400 hover:text-stone-700 transition-colors animate-bounce opacity-0 animate-hero-scroll"
         >
           <ChevronDown className="w-8 h-8" />
         </a>
       </section>
 
       {/* ── QUOTE ── */}
-      <section className="py-20 bg-white text-center">
+      <section className="py-20 bg-white/95 text-center">
         <AnimateInView className="max-w-2xl mx-auto px-6" animation="fade-in" duration={900}>
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="h-px flex-1 max-w-[80px] bg-rose-200" />
@@ -101,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* ── OUR STORY ── */}
-      <section id="story" className="py-24 bg-stone-50">
+      <section id="story" className="py-24 bg-stone-50/95">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <AnimateInView animation="slide-left" duration={800}>
@@ -156,7 +149,9 @@ export default function Home() {
       </section>
 
       {/* ── GALLERY ── */}
-      <WeddingGallery />
+      <div className="bg-stone-50/95">
+        <WeddingGallery />
+      </div>
 
       {/* ── FULL WIDTH PHOTO BANNER ── */}
       <div className="relative h-[60vh] overflow-hidden">
@@ -176,7 +171,7 @@ export default function Home() {
       </div>
 
       {/* ── EVENT DETAILS ── */}
-      <section id="details" className="py-24 bg-rose-50">
+      <section id="details" className="py-24 bg-rose-50/65">
         <div className="max-w-5xl mx-auto px-6">
           <AnimateInView className="text-center mb-14" animation="fade-up">
             <p className="text-rose-400 uppercase tracking-[0.3em] text-xs mb-3">Thông tin</p>
@@ -217,8 +212,8 @@ export default function Home() {
       <WeddingSlider />
 
       {/* ── RSVP ── */}
-      <section id="rsvp" className="py-24 bg-white">
-        <div className="max-w-3xl mx-auto px-6">
+      <section id="rsvp" className="py-24 bg-white/65">
+        <div className="max-w-3xl mx-auto rounded-3xl shadow-xl p-6 bg-white/95">
           <AnimateInView className="text-center mb-12" animation="fade-up">
             <p className="text-rose-400 uppercase tracking-[0.3em] text-xs mb-3">Xác nhận tham dự</p>
             <h2 className="font-serif text-4xl sm:text-5xl text-stone-800 mb-4">RSVP</h2>
@@ -227,7 +222,9 @@ export default function Home() {
             </p>
           </AnimateInView>
           <AnimateInView animation="fade-up" delay={200}>
-            <WeddingRSVP />
+            <div className="border border-rose-100 rounded-3xl shadow-xl shadow-rose-100/50 bg-white p-8 sm:p-10">
+              <WeddingRSVP />
+            </div>
           </AnimateInView>
         </div>
       </section>

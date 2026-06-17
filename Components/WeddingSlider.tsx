@@ -40,7 +40,7 @@ export function WeddingSlider() {
 
   return (
     <div
-      className="relative h-[400px] md:h-[65vh] overflow-hidden group"
+      className="relative h-[400px] md:h-[65vh] bg-white/65 overflow-hidden group"
       onMouseEnter={() => { if (timerRef.current) clearInterval(timerRef.current); }}
       onMouseLeave={startTimer}
     >
