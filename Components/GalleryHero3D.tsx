@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ImageLoading } from "@/Components/common/ImageLoading";
 
 // All portrait 1600×2400 — same dimensions
 const HERO_IMAGES = [
@@ -35,11 +36,15 @@ interface Obj3D {
 
 type Pos = { x: number; y: number; z: number; ry: number; rx: number };
 
-function buildTargets(scale: number): Record<Layout, Pos[]> {
-  const COLS = 5, ROWS = 4;
+function buildTargets(scale: number, isMobile: boolean): Record<Layout, Pos[]> {
+  const COLS = isMobile ? 3 : 5;
+  const ROWS = 4;
   const CX = 560 * scale, CY = 440 * scale;
+  // Mobile: show first 20 images, park the rest behind the scene
+  const GRID_N = isMobile ? 20 : N;
 
   const grid = Array.from<unknown, Pos>({ length: N }, (_, i) => {
+    if (i >= GRID_N) return { x: 0, y: 0, z: -9999, ry: 0, rx: 0 };
     const layer = Math.floor(i / (COLS * ROWS));
     const idx   = i % (COLS * ROWS);
     return {
@@ -50,9 +55,10 @@ function buildTargets(scale: number): Record<Layout, Pos[]> {
     };
   });
 
+  const TABLE_COLS = isMobile ? 4 : 8;
   const table = Array.from<unknown, Pos>({ length: N }, (_, i) => ({
-    x: (i % 8 - 3.5) * CX,
-    y: -(Math.floor(i / 8) - 2) * CY,
+    x: (i % TABLE_COLS - (TABLE_COLS - 1) / 2) * CX,
+    y: -(Math.floor(i / TABLE_COLS) - 2) * CY,
     z: 0, ry: 0, rx: 0,
   }));
 
@@ -102,9 +108,15 @@ export function GalleryHero3D() {
       if (!W || !H) return;
 
       // Responsive photo size: mobile < 640, tablet < 1024, desktop >= 1024
-      const photoW = W < 640 ? 220 : W < 1024 ? 320 : PHOTO_W_BASE;
+      const isMobile = W < 640;
+      const photoW = isMobile ? 220 : W < 1024 ? 320 : PHOTO_W_BASE;
       const photoH = Math.round(photoW * 0.75); // maintain 4:3
       const scale  = photoW / PHOTO_W_BASE;
+
+      // Camera distances scale with photo size on mobile to reduce whitespace
+      const camZ    = isMobile ? 1500 : CAM_Z;
+      const camZMin = isMobile ? 1000 : CAM_Z_MIN;
+      const camZMax = isMobile ? 1500 : CAM_Z_MAX;
 
       const renderer = new CSS3DRenderer();
       renderer.setSize(W, H);
@@ -119,9 +131,9 @@ export function GalleryHero3D() {
 
       const scene  = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(FOV, W / H, 1, 10000);
-      camera.position.z = CAM_Z;
+      camera.position.z = camZ;
 
-      const TARGETS = buildTargets(scale);
+      const TARGETS = buildTargets(scale, isMobile);
       const objects: Obj3D[] = [];
 
       HERO_IMAGES.forEach((src, i) => {
@@ -156,7 +168,7 @@ export function GalleryHero3D() {
 
       // ── Interaction state ──────────────────────────────────────────────────
       const ROT_LIMIT = Math.PI * 0.111; // ≈ 20° — max for flat layouts
-      let targetCamZ = CAM_Z;
+      let targetCamZ = camZ;
       let autoRotY   = 0;
       let autoRotDir = 1;  // bounce direction for GRID/TABLE
       let userRotY   = 0;
@@ -169,7 +181,7 @@ export function GalleryHero3D() {
       // Scroll → zoom only while hero is visible; below that, let page scroll freely
       const onWheel = (e: WheelEvent) => {
         if (window.scrollY > window.innerHeight * 0.6) return;
-        targetCamZ = Math.min(CAM_Z_MAX, Math.max(CAM_Z_MIN, targetCamZ + e.deltaY * 2));
+        targetCamZ = Math.min(camZMax, Math.max(camZMin, targetCamZ + e.deltaY * 2));
       };
       window.addEventListener("wheel", onWheel, { passive: true });
 
@@ -216,7 +228,7 @@ export function GalleryHero3D() {
             e.touches[0].clientX - e.touches[1].clientX,
             e.touches[0].clientY - e.touches[1].clientY,
           );
-          targetCamZ = Math.min(CAM_Z_MAX, Math.max(CAM_Z_MIN, targetCamZ - (d - pinchDist) * 6));
+          targetCamZ = Math.min(camZMax, Math.max(camZMin, targetCamZ - (d - pinchDist) * 6));
           pinchDist  = d;
         }
       };
@@ -326,11 +338,22 @@ export function GalleryHero3D() {
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-      {/* CSS placeholder — visible instantly, fades out once Three.js is ready */}
-      <div ref={placeholderRef} className="absolute inset-0 grid grid-cols-5 grid-rows-3 gap-1 opacity-40 pointer-events-none" aria-hidden>
-        {HERO_IMAGES.slice(0, 15).map(src => (
-          <div key={src} style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-        ))}
+      {/* Placeholder — 1 ảnh responsive, biến mất khi Three.js sẵn sàng */}
+      <div ref={placeholderRef} className="absolute inset-0 pointer-events-none" aria-hidden>
+        <ImageLoading
+          src="/images/PTH_1768.JPG"
+          alt="Ảnh cưới"
+          fill
+          className="hidden lg:block object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
+          priority
+        />
+        <ImageLoading
+          src="/images/PTH_2045.JPG"
+          alt="Ảnh cưới"
+          fill
+          className="block lg:hidden object-cover object-bottom scale-105 animate-[heroZoom_8s_ease_forwards]"
+          priority
+        />
       </div>
     </div>
   );

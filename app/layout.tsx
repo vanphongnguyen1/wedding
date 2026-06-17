@@ -22,6 +22,13 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://phongnhung.netlify.app"),
   title: "Văn Phong & Hồng Nhung — Wedding 07.05.2023",
