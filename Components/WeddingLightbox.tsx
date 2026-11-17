@@ -11,9 +11,11 @@ interface LightboxProps {
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  /** Optional view-transition-name so the photo can morph from its thumbnail */
+  photoTransitionName?: string;
 }
 
-export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext }: LightboxProps) {
+export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext, photoTransitionName }: LightboxProps) {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape") onClose();
     if (e.key === "ArrowLeft") onPrev();
@@ -87,6 +89,7 @@ export function WeddingLightbox({ images, currentIndex, onClose, onPrev, onNext 
           width={1200}
           height={900}
           className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+          style={photoTransitionName ? { viewTransitionName: photoTransitionName } : undefined}
           priority
         />
 

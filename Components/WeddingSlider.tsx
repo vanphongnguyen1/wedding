@@ -38,26 +38,63 @@ export function WeddingSlider() {
   const handlePrev = () => { prev(); startTimer(); };
   const handleNext = () => { next(); startTimer(); };
 
+  // ── Drag / swipe ───────────────────────────────────────────────────────────
+  const dragStartX = useRef<number | null>(null);
+  const [dragX, setDragX] = useState(0);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0 || (e.target as Element).closest("button")) return;
+    dragStartX.current = e.clientX;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragStartX.current === null) return;
+    setDragX(e.clientX - dragStartX.current);
+  };
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    const threshold = Math.min(80, e.currentTarget.clientWidth * 0.15);
+    dragStartX.current = null;
+    setDragX(0);
+    if (dx <= -threshold) handleNext();
+    else if (dx >= threshold) handlePrev();
+  };
+
   return (
     <div
-      className="relative h-[400px] md:h-[65vh] bg-white/65 overflow-hidden group"
+      className={cn(
+        "relative h-[400px] md:h-[65vh] bg-white overflow-hidden group select-none touch-pan-y",
+        dragX !== 0 ? "cursor-grabbing" : "cursor-grab",
+      )}
       onMouseEnter={() => { if (timerRef.current) clearInterval(timerRef.current); }}
       onMouseLeave={startTimer}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      // Keep the window-level 3D background from rotating while dragging the slider
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      onDragStart={(e) => e.preventDefault()}
     >
       {/* Slides */}
       {slides.map((src, i) => (
         <div
           key={src}
           className={cn(
-            "absolute inset-0 transition-opacity duration-1000",
+            "absolute inset-0",
+            dragX === 0 && "transition-[opacity,transform] duration-1000",
             i === current ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
+          style={i === current && dragX !== 0 ? { transform: `translateX(${dragX}px)` } : undefined}
         >
           <ImageLoading
             src={src}
             alt={`Wedding slide ${i + 1}`}
             fill
-            className="object-contain"
+            draggable={false}
+            className="object-contain pointer-events-none"
             priority={i === 0}
           />
         </div>

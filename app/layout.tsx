@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Dancing_Script } from "next/font/google";
 import Header from "@/Components/Header";
 import { Toaster } from "@/Components/ui/sonner";
 import "./globals.css";
@@ -20,6 +20,13 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   style: ["normal", "italic"],
+});
+
+// Handwritten font for polaroid captions (font-script)
+const dancing = Dancing_Script({
+  variable: "--font-dancing",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "600"],
 });
 
 export const viewport = {
@@ -56,7 +63,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${dancing.variable} antialiased`}
       >
         <Header />
         {children}

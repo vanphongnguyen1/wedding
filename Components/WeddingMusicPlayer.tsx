@@ -22,25 +22,40 @@ export function WeddingMusicPlayer({ src = "/audio/wedding-music.mp3" }: Wedding
     return () => clearTimeout(t);
   }, []);
 
-  // Play có tiếng ngay sau lần tương tác đầu tiên của user
+  // Tự phát ngay khi vào trang nếu trình duyệt cho phép; nếu bị chặn (autoplay policy)
+  // thì phát ở thao tác hợp lệ đầu tiên của user. Chỉ pointerdown/click/keydown/touchend
+  // được trình duyệt tính là "user gesture" — scroll/touchstart thì không.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onInteract = () => {
+    const events = ["pointerdown", "click", "keydown", "touchend"] as const;
+    let done = false;
+
+    const stopListening = () =>
+      events.forEach((e) => window.removeEventListener(e, tryPlay));
+
+    function tryPlay() {
+      if (done || !audio) return;
       audio.muted = false;
       audio.play()
         .then(() => {
+          done = true;
+          stopListening();
           setPlaying(true);
           setMuted(false);
           setShowHint(false);
         })
-        .catch(() => setPlaying(false));
-    };
+        .catch(() => setPlaying(false)); // blocked — keep waiting for a real gesture
+    }
 
-    const events = ["click", "scroll", "touchstart", "keydown"] as const;
-    events.forEach((e) => window.addEventListener(e, onInteract, { once: true, passive: true }));
-    return () => events.forEach((e) => window.removeEventListener(e, onInteract));
+    events.forEach((e) => window.addEventListener(e, tryPlay, { passive: true }));
+    tryPlay();
+
+    return () => {
+      done = true;
+      stopListening();
+    };
   }, []);
 
   // When muted + playing: unmute on first user interaction anywhere on the page

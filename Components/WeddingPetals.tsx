@@ -47,7 +47,7 @@ function makePetals(): Petal[] {
 
 export function WeddingPetals() {
   // Khởi tạo null để server không render gì → tránh hydration mismatch
-  const [petals, setPetals] = useState<Petal[] | null>(makePetals());
+  const [petals, setPetals] = useState<Petal[] | null>(null);
 
   useEffect(() => {
     // Chỉ chạy trên client sau khi hydration xong

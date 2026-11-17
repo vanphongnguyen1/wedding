@@ -1,0 +1,23 @@
+{
+  "$comment": "Files in public/images/farm to leave off the public /family page, and media to crop before publishing. Re-run: node scripts/compress-family-videos.mjs && node scripts/build-family-media.mjs",
+  "exclude": [
+    "IMG_1419.JPEG",
+    "IMG_1501.PNG",
+    "IMG_1376.JPEG",
+    "IMG_0232.JPEG"
+  ],
+  "excludeReasons": {
+    "IMG_1419.JPEG": "duplicate of the cropped ultrasound IMG_1419 (1)",
+    "IMG_1501.PNG": "chat screenshot showing another person's name",
+    "IMG_1376.JPEG": "child on the toilet",
+    "IMG_0232.JPEG": "child undressed"
+  },
+  "crop": {
+    "IMG_1419 (1).JPEG": { "left": 250, "top": 80, "width": 430, "height": 700 },
+    "IMG_1420.JPEG": { "left": 250, "top": 80, "width": 430, "height": 700 }
+  },
+  "videoCrop": {
+    "$comment": "ffmpeg crop=w:h:x:y — ultrasound screen recording: keep only the 3D image, drop name / DOB / hospital / measurements",
+    "1691920983228.MP4": "290:396:150:55"
+  }
+}

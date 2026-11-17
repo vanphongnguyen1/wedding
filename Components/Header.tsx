@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { href: "/", label: "Trang chủ" },
   { href: "/gallery", label: "Ảnh cưới" },
+  { href: "/family", label: "Gia đình" },
 ];
 
 export default function Header() {

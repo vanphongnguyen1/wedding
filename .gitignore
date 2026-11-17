@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw family media (originals + 1.5GB iCloud zip) — optimized copies live in public/images/family
+/public/images/farm/
