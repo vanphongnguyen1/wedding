@@ -7,7 +7,9 @@ import { join, posix, sep } from "node:path";
 const ROOT = "public";
 const walk = (dir) => readdirSync(dir).flatMap((f) => {
   const p = join(dir, f);
-  return statSync(p).isDirectory() ? walk(p) : /\.(jpe?g|png|webp)$/i.test(f) ? [p] : [];
+  // "farm" holds raw, git-ignored originals — only the optimized copies are measured
+  if (statSync(p).isDirectory()) return f === "farm" ? [] : walk(p);
+  return /\.(jpe?g|png|webp)$/i.test(f) ? [p] : [];
 });
 
 const entries = [];
