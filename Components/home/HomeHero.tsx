@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ChevronDown, Heart, Images, Send } from "lucide-react";
+import { ChevronDown, Heart } from "lucide-react";
 import { PaperTexture } from "@/Components/common/PaperTexture";
 import { PolaroidScatter } from "@/Components/home/PolaroidScatter";
 import { TogetherCounter } from "@/Components/home/TogetherCounter";
@@ -59,26 +58,6 @@ export function HomeHero() {
         <div className={rise(1300).className} style={rise(1300).style}>
           <p className="mt-8 text-lg tracking-[0.3em] font-light sm:text-xl">07 · 05 · 2023</p>
           <TogetherCounter since={WEDDING_DATE} className="mt-3" />
-        </div>
-
-        <div
-          className={cn("mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row", rise(1450).className)}
-          style={rise(1450).style}
-        >
-          <Link
-            href="/gallery"
-            className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-6 py-3 text-sm text-white transition-colors hover:bg-rose-600"
-          >
-            <Images className="h-4 w-4" />
-            Xem album
-          </Link>
-          <a
-            href="#rsvp"
-            className="inline-flex items-center gap-2 rounded-full border border-rose-300 px-6 py-3 text-sm text-rose-500 transition-colors hover:bg-rose-50"
-          >
-            <Send className="h-4 w-4" />
-            Gửi lời chúc
-          </a>
         </div>
       </div>
 
