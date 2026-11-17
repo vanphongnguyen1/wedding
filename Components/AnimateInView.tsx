@@ -11,6 +11,7 @@ interface AnimateInViewProps {
   animation?: Animation;
   delay?: number;
   duration?: number;
+  style?: React.CSSProperties;
 }
 
 const hiddenClass: Record<Animation, string> = {
@@ -27,6 +28,7 @@ export function AnimateInView({
   animation = "fade-up",
   delay = 0,
   duration = 700,
+  style,
 }: AnimateInViewProps) {
   const { ref, inView } = useInView();
 
@@ -39,6 +41,7 @@ export function AnimateInView({
         className
       )}
       style={{
+        ...style,
         transitionDuration: `${duration}ms`,
         transitionDelay: inView ? `${delay}ms` : "0ms",
       }}
